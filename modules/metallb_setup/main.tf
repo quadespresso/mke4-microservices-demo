@@ -26,9 +26,10 @@ metadata:
 spec:
   addresses:
     - "${var.lb_address_range}" 
-  YAML
 
-  depends_on =[helm_release.metallb]
+YAML
+
+  depends_on = [helm_release.metallb]
 }
 
 resource "kubectl_manifest" "l2_advertisement" {
@@ -38,9 +39,10 @@ kind: L2Advertisement
 metadata:
   name: example
   namespace: metallb-system
-  YAML
 
-  depends_on =[helm_release.metallb]
+YAML
+
+  depends_on = [helm_release.metallb]
 }
 
 resource "null_resource" "metallb_dependencies" {
