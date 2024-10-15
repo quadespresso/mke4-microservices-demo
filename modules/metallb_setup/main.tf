@@ -1,10 +1,10 @@
 resource "helm_release" "metallb" {
   create_namespace = true
-  name       = "metallb"
-  namespace  = "metallb-system"
-  chart      = "metallb"
-  repository = "https://metallb.github.io/metallb"
-  version    = var.chart_version
+  name             = "metallb"
+  namespace        = "metallb-system"
+  chart            = "metallb"
+  repository       = "https://metallb.github.io/metallb"
+  # version    = var.chart_version
 
   set {
     name  = "speaker.memberlist.mlBindPort"
