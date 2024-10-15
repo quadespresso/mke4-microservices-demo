@@ -1,5 +1,6 @@
 module "provision" {
-  source = "github.com/wkonitzer/k0s-on-equinix-terraform-templates"
+  # source = "github.com/wkonitzer/k0s-on-equinix-terraform-templates"
+  source       = "github.com/quadespresso/k0s-on-equinix-terraform-templates"
   project_id   = var.project_id
   cluster_name = var.cluster_name
   master_count = var.master_count
@@ -8,10 +9,10 @@ module "provision" {
 }
 
 module "mke4" {
-  depends_on = [module.provision]
+  depends_on         = [module.provision]
   source             = "./modules/mke4"
   k0s_cluster_config = module.provision.k0s_cluster
-  provision = module.provision.hosts
+  provision          = module.provision.hosts
 }
 
 provider "kubernetes" {
@@ -25,14 +26,14 @@ provider "helm" {
 }
 
 provider "kubectl" {
-  config_path = "${path.root}/kubeconfig"
-  load_config_file       = true
+  config_path      = "${path.root}/kubeconfig"
+  load_config_file = true
 }
 
 module "metallb" {
-  source             = "./modules/metallb_setup"
-  depends_on         = [module.mke4]
-  lb_address_range   = module.provision.lb_address_range
+  source           = "./modules/metallb_setup"
+  depends_on       = [module.mke4]
+  lb_address_range = module.provision.lb_address_range
 }
 
 #module "caddy" {
@@ -80,3 +81,4 @@ module "metallb" {
 #  domain_name = var.domain_name
 #  server_name = var.microservice_server_name
 #}
+

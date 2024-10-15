@@ -3,3 +3,10 @@ mke_server_name          = "mke2"
 longhorn_server_name     = "longhorn2"
 msr_server_name          = "msr2"
 microservice_server_name = "microservice2"
+metros = {
+	metro = "da"
+	reserved_hardware = {
+		id = "..."
+		plan = "c3.small.x86"
+	}
+}

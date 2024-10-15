@@ -18,20 +18,23 @@ variable "use_reserved_hardware" {
 
 variable "cluster_name" {
   default = "mke"
+  type    = string
 }
 
 variable "master_count" {
   default = 3
+  type    = number
 }
 
 variable "worker_count" {
   default = 3
+  type    = number
 }
 
 variable "metros" {
   description = "List of metros and their reserved hardware"
   type = list(object({
-    metro            = string
+    metro = string
     reserved_hardware = list(object({
       id   = string
       plan = string
@@ -46,6 +49,7 @@ variable "admin_password" {
 variable "email" {
   description = "The email address to be used with Ingress controllers"
   type        = string
+  default     = "user@example.com"
 }
 
 variable "godaddy_api_key" {
