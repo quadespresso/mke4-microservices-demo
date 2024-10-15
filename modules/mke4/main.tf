@@ -56,7 +56,8 @@ for host in k0s_cluster_config["spec"]["hosts"]:
 
 # mkectl_init["metadata"]["name"] = k0s_cluster_config["metadata"]["name"]
 mkectl_init["spec"]["hosts"] = k0s_cluster_config["spec"]["hosts"]
-mkectl_init["spec"]["k0s"] = k0s_cluster_config["spec"]["k0s"]
+# mkectl_init["spec"]["k0s"] = k0s_cluster_config["spec"]["k0s"]
+mkectl_init["spec"]["addons"][0]["enabled"] = True
 
 # Need to stick with 'dump' instead of 'safe_dump' to preserve multiline strings
 with open(mke4_config_file, "w") as f:
@@ -82,13 +83,26 @@ resource "null_resource" "run_mkectl_apply" {
   provisioner "local-exec" {
     command = <<EOT
       mkectl apply -f ${local.mke4_config_file}
-      mv ~/.mke/mke.kubeconf ${path.root}/kubeconfig
       sleep 70
     EOT  
   }
 
   triggers = {
     first_task_ran = null_resource.merged_yaml_files.triggers.always_run
+  }
+}
+
+resource "null_resource" "move_kubeconfig" {
+  depends_on = [null_resource.run_mkectl_apply]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      mv ~/.mke/mke.kubeconf ${path.root}/kubeconfig
+    EOT  
+  }
+
+  triggers = {
+    first_task_ran = null_resource.run_mkectl_apply.triggers.first_task_ran
   }
 }
 
